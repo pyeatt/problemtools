@@ -50,6 +50,7 @@
 \RequirePackage{url}              % Urls
 \RequirePackage[normalem]{ulem}   % \sout
 \RequirePackage[colorlinks=true,implicit=false]{hyperref}
+\RequirePackage{xifthen}
 \ifplastex\else
 \RequirePackage{pgffor}
 \fi
@@ -84,6 +85,25 @@
   \addtolength{\textheight}{-\headheight}
 }
 
+% Commands for generating frontpage from a PDF page.
+
+\newcommand{\contestfrontpage}[1]{
+  \def\@contestfrontpage{#1}
+}
+
+% \contestdate}[4.5in]{January 1, 2014}
+\newcommand{\contestdate}[2][]{
+  \ifthenelse{\isempty{#1}}{
+    \def\@dateposition{4.5in}}{\def\@dateposition{#1}}
+  \def\@contestdate{#2}
+}
+
+\newcommand{\makefrontpage}{
+\thispagestyle{empty}
+\definecolor{ACMblue}{RGB}{83,127,201}
+\includepdf[pagecommand={\vspace*{\@dateposition}\centerline{\LARGE\bfseries\fontfamily{phv}\selectfont\textcolor{ACMblue}{\@contestdate}}}]{\@contestfrontpage}
+\cleardoublepage
+}
 
 
 % Typesetting sections in a problem
